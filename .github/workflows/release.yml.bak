@@ -75,20 +75,15 @@ jobs:
           prerelease: true
           files: "./MoeKoe_Music_Setup_${{ needs.increment-version.outputs.version }}.exe"
 
-
-  # Linux 端打包并上传到 GitHub Release
-  # Linux 端打包并上传到 GitHub Release (支持 arm64)
-  build-linux:
-    name: Build for Linux (amd64 & arm64)
-    runs-on: ubuntu-latest
+  # macOS 端打包并上传到 GitHub Release
+  build-macos:
+    name: Build for macOS
+    runs-on: macos-latest
     needs: increment-version
     timeout-minutes: 30
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set Up QEMU (for ARM64 build)
-        uses: docker/setup-qemu-action@v3  # 启用 QEMU 以支持 arm64
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -101,20 +96,57 @@ jobs:
       - name: Run common build
         run: npm run build
 
-      # 构建 x86_64 (amd64) 版本
-      - name: Run Linux AMD64 build
-        run: npm run electron:build:linux
+      - name: Run macOS build
+        run: npm run electron:build:macos
 
-      # 构建 arm64 版本
-      - name: Run Linux ARM64 build
-        run: npm run electron:build:linux -- --arm64
+      - name: Rename macOS artifacts
+        run: |
+          mv "./dist_electron/MoeKoe Music-1.2.0-arm64.dmg" "./MoeKoe_Music_${{ needs.increment-version.outputs.version }}-arm64.dmg"
+          mv "./dist_electron/MoeKoe Music-1.2.0-arm64-mac.zip" "./MoeKoe_Music_${{ needs.increment-version.outputs.version }}-arm64-mac.zip"
+      
+      - name: List files after renaming
+        run: ls -al ./dist_electron
+
+      - name: Upload macOS artifacts to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.increment-version.outputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: "Release ${{ needs.increment-version.outputs.version }}"
+          body: ${{ env.COMMIT_MESSAGE }}
+          prerelease: true
+          files: |
+            ./MoeKoe_Music_${{ needs.increment-version.outputs.version }}-arm64.dmg
+            ./MoeKoe_Music_${{ needs.increment-version.outputs.version }}-arm64-mac.zip
+
+  # Linux 端打包并上传到 GitHub Release
+  build-linux:
+    name: Build for Linux
+    runs-on: ubuntu-latest
+    needs: increment-version
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm run install-all
+
+      - name: Run common build
+        run: npm run build
+
+      - name: Run Linux build
+        run: npm run electron:build:linux
 
       - name: Rename Linux artifacts
         run: |
-          mv "./dist_electron/MoeKoe Music-1.2.0.AppImage" "./MoeKoe_Music_${{ needs.increment-version.outputs.version }}_amd64.AppImage"
+          mv "./dist_electron/MoeKoe Music-1.2.0.AppImage" "./MoeKoe_Music_${{ needs.increment-version.outputs.version }}.AppImage"
           mv "./dist_electron/moekoemusic_1.2.0_amd64.deb" "./moekoemusic_${{ needs.increment-version.outputs.version }}_amd64.deb"
-          mv "./dist_electron/MoeKoe Music-1.2.0-arm64.AppImage" "./MoeKoe_Music_${{ needs.increment-version.outputs.version }}_arm64.AppImage"
-          mv "./dist_electron/moekoemusic_1.2.0_arm64.deb" "./moekoemusic_${{ needs.increment-version.outputs.version }}_arm64.deb"
 
       - name: Upload Linux artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
@@ -125,9 +157,6 @@ jobs:
           body: ${{ env.COMMIT_MESSAGE }}
           prerelease: true
           files: |
-            ./MoeKoe_Music_${{ needs.increment-version.outputs.version }}_amd64.AppImage
+            ./MoeKoe_Music_${{ needs.increment-version.outputs.version }}.AppImage
             ./moekoemusic_${{ needs.increment-version.outputs.version }}_amd64.deb
-            ./MoeKoe_Music_${{ needs.increment-version.outputs.version }}_arm64.AppImage
-            ./moekoemusic_${{ needs.increment-version.outputs.version }}_arm64.deb
-     
         
