@@ -107,7 +107,8 @@ jobs:
 
       # 构建 arm64 版本
       - name: Run Linux ARM64 build
-        run: npm run electron:build:linux -- --arm64
+        #run: npm run electron:build:linux -- --arm64
+        run: npm run electron:build -- --linux --arm64
 
       - name: Rename Linux artifacts
         run: |
