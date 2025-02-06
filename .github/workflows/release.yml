@@ -36,10 +36,10 @@ jobs:
           NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
           echo "::set-output name=NEW_VERSION::$NEW_VERSION"
 
-      - name: Create Git tag
-        run: |
-          git tag ${{ steps.set-version.outputs.NEW_VERSION }}
-          git push origin ${{ steps.set-version.outputs.NEW_VERSION }}
+      # - name: Create Git tag
+      #   run: |
+      #     git tag ${{ steps.set-version.outputs.NEW_VERSION }}
+      #     git push origin ${{ steps.set-version.outputs.NEW_VERSION }}
 
   build-linux:
     name: Build for Linux
@@ -62,13 +62,13 @@ jobs:
         run: npm run build
 
       - name: Run Linux build
-        run: npm run electron:build:linux
+        run: npm run electron:build:linux:arm64
 
       - name: Rename Linux artifacts
         run: |
           ls -al ./dist_electron
-          mv "./dist_electron/MoeKoe Music-1.2.0-arm64.AppImage" "./MoeKoe_Music_v1.2.3_arm64.AppImage"
-          mv "./dist_electron/moekoemusic_1.2.0_arm64.deb" "./moekoemusic_v1.2.3_arm64.deb"
+          mv "./dist_electron/MoeKoe Music-1.2.0-arm64.AppImage" "./MoeKoe_Music_${{ needs.increment-version.outputs.version }}_arm64.AppImage"
+          mv "./dist_electron/moekoemusic_1.2.0_arm64.deb" "./moekoemusic_${{ needs.increment-version.outputs.version }}_arm64.deb"
 
       - name: Upload Linux artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
