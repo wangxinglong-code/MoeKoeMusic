@@ -66,6 +66,7 @@ jobs:
 
       - name: Rename Linux artifacts
         run: |
+          ls -al ./dist_electron
           mv "./dist_electron/MoeKoe Music-1.2.0-arm64.AppImage" "./MoeKoe_Music_v1.2.3_arm64.AppImage"
           mv "./dist_electron/moekoemusic_1.2.0_arm64.deb" "./moekoemusic_v1.2.3_arm64.deb"
 
