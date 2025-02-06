@@ -66,8 +66,8 @@ jobs:
 
       - name: Rename Linux artifacts
         run: |
-          mv "./dist_electron/MoeKoe Music-1.2.0-arm64.AppImage" "./MoeKoe_Music_${{ needs.increment-version.outputs.version }}_arm64.AppImage"
-          mv "./dist_electron/moekoemusic_1.2.0_arm64.deb" "./moekoemusic_${{ needs.increment-version.outputs.version }}_arm64.deb"
+          mv "./dist_electron/MoeKoe Music-1.2.0-arm64.AppImage" "./MoeKoe_Music_v1.2.3_arm64.AppImage"
+          mv "./dist_electron/moekoemusic_1.2.0_arm64.deb" "./moekoemusic_v1.2.3_arm64.deb"
 
       - name: Upload Linux artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
