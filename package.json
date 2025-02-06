@@ -15,6 +15,7 @@
     "build:api:macos": "npm run --prefix ./api pkgmacos",
     "electron:build:win": "run-s build:api:win \"electron:build -- --win\"",
     "electron:build:linux": "run-s build:api:linux \"electron:build -- --linux\"",
+    "electron:build:linux:arm64": "run-s build:api:linux \"electron:build -- --linux --arm64\"",
     "electron:build:macos": "run-s build:api:macos \"electron:build -- --mac --arm64\"",
     "electron:build": "cross-env NODE_ENV=production electron-builder"
   },
@@ -102,7 +103,11 @@
         "AppImage",
         "deb"
       ],
-      "category": "Utility"
+      "category": "Utility",
+      "arch": [
+        "x64",
+        "arm64"
+      ]
     }
   },
   "type": "module",
