@@ -103,11 +103,7 @@
         "AppImage",
         "deb"
       ],
-      "category": "Utility",
-      "arch": [
-        "x64",
-        "arm64"
-      ]
+      "category": "Utility"
     }
   },
   "type": "module",
