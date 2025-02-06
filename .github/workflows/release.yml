@@ -91,5 +91,5 @@ jobs:
           body: "Auto-generated ARM64 release ${{ env.NEW_VERSION }}"
           prerelease: true
           files: |
-            ./MoeKoe_Music_${{ env.NEW_VERSION }}_arm64.AppImage
-            ./moekoemusic_${{ env.NEW_VERSION }}_arm64.deb
+            ./MoeKoe_Music__arm64.AppImage
+            ./moekoemusic__arm64.deb
