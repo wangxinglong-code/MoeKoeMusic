@@ -62,6 +62,9 @@ jobs:
       - name: Run Linux ARM64 build
         run: npm run electron:build -- --linux --arm64
 
+      - name: List files in dist_electron directory
+        run: ls -al ./dist_electron  # 列出 dist_electron 目录中的文件
+
       - name: Rename Linux artifacts
         run: |
           mv "./dist_electron/MoeKoe Music-1.2.0.AppImage" "./MoeKoe_Music_${{ needs.increment-version.outputs.version }}_amd64.AppImage"
